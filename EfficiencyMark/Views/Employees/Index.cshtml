@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using Newtonsoft.Json;
+@using EfficiencyMark.ViewModels;
+@using EfficiencyMark.Models
+@model IndexViewModel
+@addTagHelper "*,  EfficiencyMark"
+
+
+<form method="get" role="form" class="form-horizontal">
+
+    <div class="form-group">
+
+        <label class="control-label">Фамилия </label>
+        @Html.TextBox("MiddleName", Model.FilterEmpViewModel.SelectedMiddleName, htmlAttributes: new { @class = "form-control" })
+
+        <label class="control-label">Имя: </label>
+        @Html.TextBox("Name", Model.FilterEmpViewModel.SelectedName, htmlAttributes: new { @class = "form-control" })
+
+
+        <label class="control-label">Отчество: </label>
+        @Html.TextBox("Surname", Model.FilterEmpViewModel.SelectedSurname ,htmlAttributes: new { @class = "form-control" })
+
+        <br>
+        <input type="submit" value="Отфильтровать" class="btn btn-default" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+        <tr>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">Имя</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewBag.MiddleNameSort">Фамилия</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewBag.SurnameSort">Отчество</a></th>
+            <th>Действия</th>
+        </tr>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Employees) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробно</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<page-link page-model="Model.PageViewModel" page-action="Index"></page-link>

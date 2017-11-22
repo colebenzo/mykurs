@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using Newtonsoft.Json;
+@using EfficiencyMark.ViewModels;
+@using EfficiencyMark.Models
+@model IndexViewModel
+@addTagHelper "*,  EfficiencyMark"
+
+<form method="get" role="form" class="form-horizontal">
+
+    <div class="form-group">
+
+        <label class="control-label">Имя: </label>
+        @Html.TextBox("Name", Model.FilterListViewModel.SelectedName, htmlAttributes: new { @class = "form-control" })
+
+        <label class="control-label">Название показателя: </label>
+        @Html.TextBox("NameOfTheIndicator", Model.FilterListViewModel.SelectedNameOfTheIndicator, htmlAttributes: new { @class = "form-control" })
+
+        <br>
+        <input type="submit" value="Отфильтровать" class="btn btn-default" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">Имя</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewBag.NameOfTheIndicatorSort">Название показателя</a></th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ListOfIndicators) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameOfTheIndicator)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробно</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<page-link page-model="Model.PageViewModel" page-action="Index"></page-link>
